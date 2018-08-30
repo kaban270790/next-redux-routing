@@ -1,0 +1,85 @@
+{
+  "name": "next-redux-routing",
+  "version": "1.0.0",
+  "author": "zipcube",
+  "license": "MIT",
+  "keywords": [
+    "next",
+    "next.js",
+    "react",
+    "redux",
+    "route",
+    "router",
+    "routes",
+    "routing"
+  ],
+  "description": "Universal, \"single source of truth\" routing solution for Next.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/zipcube/next-redux-routing"
+  },
+  "bugs": {
+    "url": "https://github.com/zipcube/next-redux-routing/issues"
+  },
+  "homepage": "https://github.com/zipcube/next-redux-routing#readme",
+  "main": "dist/index.js",
+  "typings": "dist/index.d.ts",
+  "files": [
+    "lib"
+  ],
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/test/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ]
+  },
+  "scripts": {
+    "build": "del dist/* && tsc",
+    "test": "jest --coverage"
+  },
+  "peerDependencies": {
+    "express": ">=4",
+    "next": ">=6",
+    "react": "^15.5.4 || ^16",
+    "redux": ">=3.7.2"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.0.0-beta.55",
+    "@babel/core": "^7.0.0-beta.55",
+    "@babel/preset-env": "^7.0.0-beta.55",
+    "@types/express": "^4.16.0",
+    "@types/hashmap": "^2.0.29",
+    "@types/jest": "^23.3.1",
+    "@types/next": "latest",
+    "@types/node": "^10.5.2",
+    "babel-core": "^7.0.0-bridge.0",
+    "babel-eslint": "^8.2.1",
+    "babel-jest": "^22.4.3",
+    "concurrently": "^3.5.0",
+    "coveralls": "^3.0.2",
+    "del-cli": "^1.1.0",
+    "express": "^4.16.3",
+    "jest": "^22.4.3",
+    "jest-express": "^1.6.1",
+    "next": "^6.0.0",
+    "react": "^16.1.1",
+    "react-dom": "^16.1.1",
+    "react-test-renderer": "^16.4.1",
+    "redux": "^4.0.0",
+    "standard": "^11.0.1",
+    "ts-jest": "^23.1.4",
+    "typescript": "^3.0.3"
+  },
+  "dependencies": {
+    "qs": "^6.5.2"
+  }
+}
