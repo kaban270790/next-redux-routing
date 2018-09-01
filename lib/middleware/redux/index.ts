@@ -1,28 +1,54 @@
 
-import Router from 'next/router';
-import qs from 'qs';
+import { Middleware } from 'redux';
+// import qs from 'qs';
 
 import { NAVIGATE } from './constants';
 
-import { OptionsObject, ReduxMiddleware } from '@typings/next-redux-routing';
-import { startNavigation } from './actionCreators';
+import { IRouter } from '@typings/next-redux-routing';
+import { navigateFailure, navigateSuccess, startNavigation } from './actionCreators';
 
-const reduxMiddleware: ReduxMiddleware = opts => ({ dispatch }) => next => action => {
-  dispatch(startNavigation());
-  // const { routes } = opts;
-  // if (action.type === NAVIGATE) {
-  //   Router.push(
-  //     {
-  //       pathname: route.filePath,
-  //     },
-  //     {
-  //       pathname: `/${domain}${pathname}`,
-  //       query,
-  //     }
-  //   );
-  // }
+function reduxMiddleware(this: IRouter): Middleware {
+  if (typeof this.routes === 'undefined') {
+    throw new Error('No routes provided');
+  } else if (typeof this.Router === 'undefined') {
+    throw new Error('No router instance found');
+  }
+  return ({ dispatch }) => next => action => {
+    if (action.type === NAVIGATE) {
+      dispatch(startNavigation());
 
-  return next(action);
-};
+      const { href, query } = action;
+      const route = this.routes.find(r => new RegExp(r.regExp).test(href));
+
+      if (!route) {
+        dispatch(navigateFailure(new Error('Route not found')));
+        return;
+      }
+
+      this.Router.push(
+        {
+          pathname: route.filePath,
+        },
+        {
+          pathname: `/${route.pathname}`,
+          query,
+        }
+      ).then(success => {
+        if (!success) {
+          dispatch(navigateFailure(new Error('Route push unsuccessful')));
+          return;
+        }
+        dispatch(navigateSuccess(route));
+      }, error => {
+        dispatch(navigateFailure(error));
+      })
+      .catch(error => {
+        dispatch(navigateFailure(error));
+      });
+    }
+
+    return next(action);
+  };
+}
 
 export default reduxMiddleware;
