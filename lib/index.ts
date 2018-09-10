@@ -1,18 +1,19 @@
 
 import { ComponentType } from 'react';
+import { Server } from 'next';
 import NextRouter from 'next/router';
 import { Middleware } from 'redux';
 import { expressMiddleware, reduxMiddleware } from './middleware';
 import { ExpressMiddleware, OptionsObject, IRouter, RouteObject } from "@typings/next-redux-routing";
 
-class Router implements IRouter {
+export class Router implements IRouter {
   public expressMiddleware: ExpressMiddleware;
   // public Link: ComponentType;
   public reduxMiddleware: Middleware;
   public Router: typeof NextRouter;
   public routes: RouteObject[];
 
-  constructor(opts: OptionsObject) {
+  constructor(opts: OptionsObject = {}) {
     const { routes } = opts;
     if (typeof routes === 'undefined' || !(Object.keys(routes).length > 0)) {
       throw new Error('No routes provided');
@@ -27,12 +28,21 @@ class Router implements IRouter {
     });
   }
 
-  getByName(name: string) {
+  getByName(name: string): RouteObject | undefined {
     return this.routes.find(r => r.name === name);
   }
 
-  getByPath(path: string) {
+  getByPath(path: string): RouteObject | undefined {
     return this.routes.find(r => new RegExp(r.regExp).test(path));
+  }
+
+  pushRoute(route: RouteObject, query: object = {}): Promise<boolean> {
+    return this.Router.push({
+      pathname: route.filePath,
+    }, {
+      pathname: `/${route.pathname}`,
+      query,
+    });
   }
 }
 

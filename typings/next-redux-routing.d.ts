@@ -8,7 +8,7 @@ export type ExpressMiddleware = (app: Server) => ExpressRouter;
 export type ExpressMiddlewareConstructor = (opts: OptionsObject) => ExpressMiddleware;
 
 export type OptionsObject = {
-  routes: Routes;
+  routes?: Routes;
 };
 
 export type ReduxOptionsObject = {
@@ -30,7 +30,7 @@ export type RouteObject = {
 };
 
 export interface INavigateAction extends Action {
-  routeName: string;
+  href: string;
 }
 
 export interface INavigateFailureAction extends Action {
@@ -48,4 +48,9 @@ export interface IRouter {
   Router: Server['router'];
 
   routes: RouteObject[];
+
+  getByName: (name: string) => RouteObject | undefined;
+  getByPath: (path: string) => RouteObject | undefined;
+
+  pushRoute: (route: RouteObject, query: object) => Promise<boolean>
 }

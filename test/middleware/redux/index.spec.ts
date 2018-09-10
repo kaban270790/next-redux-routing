@@ -1,19 +1,22 @@
 
-import NextRouter from 'next/router';
+// import NextRouter from 'next/router';
+import configureMockStore from 'redux-mock-store';
 
+import Router from '../../../lib';
 import routerMiddleware from '../../../lib/middleware/redux';
 
 import routes from '../../../routes';
-import { NAVIGATE } from '../../../lib/middleware/redux/constants';
+import { NAVIGATE, START_NAVIGATION, NAVIGATE_FAILURE, NAVIGATE_SUCCESS } from '../../../lib/middleware/redux/constants';
+import { navigate } from '../../../lib/middleware/redux/actionCreators';
+import initialState from '../../../lib/middleware/redux/initialState';
 
 const mappedRoutes = Object.keys(routes).map(key => ({ name: key, ...routes[key] }));
 
-const Router = {
-  routes: mappedRoutes,
-  Router: {
-    push: () => new Promise(resolve => { resolve() }),
-  },
-};
+const router = Router({ routes });
+router.pushRoute = () => new Promise((resolve) => { resolve(true); });
+
+const middleware = [routerMiddleware.call(router)];
+const mockStore = configureMockStore(middleware);
 
 describe('Express middleware', () => {
   it('should throw an error if no routes file is provided', () => {
@@ -24,51 +27,52 @@ describe('Express middleware', () => {
     expect(routerMiddleware.bind({ routes: mappedRoutes })).toThrowError('No router instance found');
   });
 
-  it('should return an anonymous function', () => {
-    expect(routerMiddleware.call(Router)).toBeInstanceOf(Function);
+  it(`should dispatch the navigateFailure action when no route is found`, async () => {
+    const expectedActions = [
+      { type: START_NAVIGATION },
+      { type: NAVIGATE_FAILURE, error: new Error('Route not found') },
+    ];
+
+    const store = mockStore(initialState);
+
+    await store.dispatch(navigate('/noop'));
+
+    expect(store.getActions()).toEqual(expectedActions);
   });
 
-  it('should return a function that returns a function', () => {
-    expect(routerMiddleware.call(Router)({})).toBeInstanceOf(Function);
+  it(`should dispatch the navigateSuccess action when Router push is successful`, async () => {
+    const expectedActions = [
+      { type: START_NAVIGATION },
+      {
+        type: NAVIGATE_SUCCESS,
+        route: {
+          name: 'about',
+          regExp: '\\b(about)\\b/?$',
+          pathname: 'about',
+          filePath: '/pages/about'
+        }
+      },
+    ];
+
+    const store = mockStore(initialState);
+
+    await store.dispatch(navigate('/about'));
+
+    expect(store.getActions()).toEqual(expectedActions);
   });
 
-  it('should return a function that returns a function that returns a function', () => {
-    expect(routerMiddleware.call(Router)({})(() => ({}))).toBeInstanceOf(Function);
-  });
+  it(`should dispatch the navigateFailure action when Router push is unsuccessful`, async () => {
+    router.pushRoute = () => new Promise((_, reject) => { reject(new Error('Route push unsuccessful')); });
 
-  it(`should dispatch the startNavigation action when the ${NAVIGATE} action is called`, () => {
-    const action = {
-      type: NAVIGATE,
-      href: '/',
-    };
-    const mockDispatch = jest.fn();
+    const expectedActions = [
+      { type: START_NAVIGATION },
+      { type: NAVIGATE_FAILURE, error: new Error('Route push unsuccessful') },
+    ];
 
-    routerMiddleware.call(Router)({ dispatch: mockDispatch })(() => ({}))(action);
+    const store = mockStore(initialState);
 
-    expect(mockDispatch).toHaveBeenCalled()
-  });
+    await store.dispatch(navigate('/about'));
 
-  it(`should dispatch the navigateFailure action when no route is found`, () => {
-    const action = {
-      type: NAVIGATE,
-      href: '/noop',
-    };
-    const mockDispatch = jest.fn();
-
-    routerMiddleware.call(Router)({ dispatch: mockDispatch })(() => ({}))(action);
-
-    expect(mockDispatch).toHaveBeenCalled()
-  });
-
-  it(`should dispatch the navigateSuccess action when Router push is successful`, () => {
-    const action = {
-      type: NAVIGATE,
-      href: '/',
-    };
-    const mockDispatch = jest.fn();
-
-    routerMiddleware.call(Router)({ dispatch: mockDispatch })(() => ({}))(action);
-
-    expect(mockDispatch).toHaveBeenCalled()
+    expect(store.getActions()).toEqual(expectedActions);
   });
 });

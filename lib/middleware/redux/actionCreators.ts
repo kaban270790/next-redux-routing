@@ -16,9 +16,9 @@ import {
   RouteObject,
 } from '@typings/next-redux-routing';
 
-export const navigate = (routeName: string): INavigateAction => ({
+export const navigate = (href: string): INavigateAction => ({
   type: NAVIGATE,
-  routeName,
+  href,
 });
 
 export const navigateFailure = (error: Error): INavigateFailureAction => ({

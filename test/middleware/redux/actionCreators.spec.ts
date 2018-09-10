@@ -14,9 +14,9 @@ import {
 
 describe('actionCreators', () => {
   it('navigate should return the correct action object', () => {
-    expect(navigate('home')).toEqual({
+    expect(navigate('/home')).toEqual({
       type: NAVIGATE,
-      routeName: 'home',
+      href: '/home',
     })
   });
 

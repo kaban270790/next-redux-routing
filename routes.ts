@@ -1,7 +1,7 @@
 
 export default {
   about: {
-    regExp: '^\\b(about)\\b/?$',
+    regExp: '\\b(about)\\b/?$',
     pathname: 'about',
     filePath: '/pages/about',
   },
