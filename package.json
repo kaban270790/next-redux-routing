@@ -43,8 +43,8 @@
     ]
   },
   "scripts": {
-    "build": "del dist/* && tsc",
-    "test": "jest --coverage"
+    "build": "del dist/* && ./node_modules/typescript/bin/tsc",
+    "test": "./node_modules/jest/bin/jest.js --coverage"
   },
   "peerDependencies": {
     "express": ">=4",
