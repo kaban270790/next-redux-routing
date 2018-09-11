@@ -14,13 +14,13 @@ export class Router implements IRouter {
   public routes: RouteObject[];
 
   constructor(opts: OptionsObject = {}) {
-    const { routes } = opts;
+    const { Router = NextRouter, routes } = opts;
     if (typeof routes === 'undefined' || !(Object.keys(routes).length > 0)) {
       throw new Error('No routes provided');
     }
     this.routes = Object.keys(routes).map(key => ({ name: key, ...routes[key] }));
     this.Link = this.getLink();
-    this.Router = NextRouter;
+    this.Router = Router;
     this.expressMiddleware = expressMiddleware.call(this);
     this.reduxMiddleware = reduxMiddleware.call(this, {
       ...opts,
@@ -28,7 +28,15 @@ export class Router implements IRouter {
     });
   }
 
-  getLink() {
+  getByName = (name: string): RouteObject | undefined => {
+    return this.routes.find(r => r.name ? (r.name === name) : false);
+  }
+
+  getByPath = (path: string): RouteObject | undefined => {
+    return this.routes.find(r => r.regExp ? new RegExp(r.regExp).test(path) : false);
+  }
+
+  getLink = () => {
     return (props: LinkProps) => (
       <Link
         getByPath={this.getByPath}
@@ -38,15 +46,7 @@ export class Router implements IRouter {
     );
   }
 
-  getByName(name: string): RouteObject | undefined {
-    return this.routes.find(r => r.name ? (r.name === name) : false);
-  }
-
-  getByPath(path: string): RouteObject | undefined {
-    return this.routes.find(r => r.regExp ? new RegExp(r.regExp).test(path) : false);
-  }
-
-  pushRoute(route: RouteObject, query: object = {}): Promise<boolean> {
+  pushRoute = (route: RouteObject, query: object = {}): Promise<boolean> => {
     return this.Router.push({
       pathname: route.filePath,
     }, {

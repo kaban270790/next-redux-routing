@@ -1,5 +1,4 @@
 
-// import NextRouter from 'next/router';
 import configureMockStore from 'redux-mock-store';
 
 import Router from '../../../lib';

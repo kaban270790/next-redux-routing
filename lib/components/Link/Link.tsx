@@ -1,16 +1,8 @@
 
 import * as React from 'react';
-import NextRouter from 'next/router';
 import { resolve } from 'url';
 
-import { navigate } from '../../middleware/redux/actionCreators';
-
-// Types
 import { LinkProps, OptionsType, RouteObject } from '@typings/next-redux-routing';
-interface Props extends LinkProps {
-  getByPath: (path: string) => RouteObject | undefined;
-  Router: typeof NextRouter;
-};
 type ChildProps = {
   href?: string;
   onClick: (e: React.MouseEvent) => void;
@@ -18,7 +10,7 @@ type ChildProps = {
 
 declare const window: any;
 
-export default class Link extends React.PureComponent<Props> {
+export default class Link extends React.PureComponent<LinkProps> {
   static defaultProps = {
     prefetch: false,
     scroll: true,
@@ -27,7 +19,7 @@ export default class Link extends React.PureComponent<Props> {
   protected isKnownRoute: boolean;
   protected route: RouteObject;
 
-  constructor(props: Props) {
+  constructor(props: LinkProps) {
     super(props);
     const { href } = props;
     const { route, isKnownRoute } = this.getRoute();
@@ -40,7 +32,7 @@ export default class Link extends React.PureComponent<Props> {
     this.prefetch();
   }
 
-  componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: LinkProps) {
     const { href } = this.props;
     if (JSON.stringify(prevProps.href) !== JSON.stringify(href)) {
       this.prefetch();
@@ -68,14 +60,14 @@ export default class Link extends React.PureComponent<Props> {
     };
   }
 
-  linkClicked = (e: React.MouseEvent) => {
+  linkClicked = (e: React.MouseEvent): void => {
     if (this.isKnownRoute) {
       e.preventDefault();
 
-      const { href } = this.props;
+      const { href, navigate } = this.props;
       let { scroll } = this.props;
 
-      if (scroll == null) { // eslint-disable-line
+      if (scroll == null) {
         scroll = href.indexOf('#') < 0;
       }
       if (!this.isKnownRoute) {
@@ -90,7 +82,7 @@ export default class Link extends React.PureComponent<Props> {
     }
   }
 
-  prefetch = () => {
+  prefetch = (): void => {
     const { prefetch, Router } = this.props;
     if (!prefetch) {
       return;

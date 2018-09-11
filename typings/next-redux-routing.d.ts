@@ -1,6 +1,7 @@
 
 import { Request, Response, Router as ExpressRouter } from 'express';
 import { QueryStringMapObject, Server } from 'next';
+import NextRouter from 'next/router';
 import { ComponentType } from 'react';
 import { Action, Middleware } from 'redux';
 
@@ -11,12 +12,15 @@ export interface LinkProps {
   children: JSX.Element | JSX.Element[];
   href: string;
   prefetch?: boolean;
-  // navigate?: (route: RouteObject, options: OptionsObject) => void;
+  navigate: Navigate;
   scroll?: boolean;
 }
 
+export type Navigate = (href: string, options?: OptionsType) => Promise<any>;
+
 export type OptionsObject = {
   routes?: Routes;
+  Router?: typeof NextRouter;
 };
 
 export type OptionsType = {
