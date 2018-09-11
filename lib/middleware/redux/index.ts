@@ -1,13 +1,10 @@
 
 import { Middleware } from 'redux';
-// import qs from 'qs';
-
-import { Server } from 'next';
 
 import { NAVIGATE } from './constants';
-
-import { IRouter, RouteObject } from '@typings/next-redux-routing';
 import { navigateFailure, navigateSuccess, startNavigation } from './actionCreators';
+
+import { IRouter } from '@typings/next-redux-routing';
 
 export default function reduxMiddleware(this: IRouter): Middleware {
   if (typeof this.routes === 'undefined') {
@@ -20,7 +17,7 @@ export default function reduxMiddleware(this: IRouter): Middleware {
       dispatch(startNavigation());
 
       const { href, query } = action;
-      const route = this.routes.find(r => new RegExp(r.regExp).test(href));
+      const route = this.routes.find(r => r.regExp ? new RegExp(r.regExp).test(href) : false);
 
       if (!route) {
         dispatch(navigateFailure(new Error('Route not found')));
@@ -29,7 +26,10 @@ export default function reduxMiddleware(this: IRouter): Middleware {
 
       return this.pushRoute(route, query)
         .then((success: boolean) => {
-          return dispatch(navigateSuccess(route));
+          if (success) {
+            return dispatch(navigateSuccess(route));
+          }
+          return dispatch(navigateFailure(new Error('Route push unsuccessful')));
         }, () => {
           return dispatch(navigateFailure(new Error('Route push unsuccessful')));
         })

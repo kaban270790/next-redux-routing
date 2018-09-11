@@ -14,11 +14,13 @@ import {
   INavigateFailureAction,
   INavigateSuccessAction,
   RouteObject,
+  OptionsType,
 } from '@typings/next-redux-routing';
 
-export const navigate = (href: string): INavigateAction => ({
+export const navigate = (href: string, options?: OptionsType): INavigateAction => ({
   type: NAVIGATE,
   href,
+  options,
 });
 
 export const navigateFailure = (error: Error): INavigateFailureAction => ({

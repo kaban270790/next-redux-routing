@@ -1,12 +1,14 @@
 
-import { Request, Response } from 'express';
-import { QueryStringMapObject, Server } from 'next';
+import { Render } from "@typings/next-redux-routing";
 
-export default async function render(app: Server, req: Request, res: Response, pagePath: string, params?: QueryStringMapObject): Promise<void> {
-  try {
-    const html = await app.renderToHTML(req, res, pagePath, params);
-    res.send(html);
-  } catch (err) {
-    app.renderError(err, req, res, pagePath, params);
-  }
+const render: Render = function render(app, req, res, pagePath, params) {
+  return app.renderToHTML(req, res, pagePath, params)
+    .then(html => {
+      res.send(html);
+    })
+    .catch(error => {
+      app.renderError(error, req, res, pagePath, params);
+    });
 }
+
+export default render;

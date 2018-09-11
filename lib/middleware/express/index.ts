@@ -1,7 +1,9 @@
 
-import { Request, Response, Router } from 'express';
-import render from './render';
+import { Router } from 'express';
 import { ExpressMiddleware, IRouter, RouteObject } from '@typings/next-redux-routing';
+
+import render from './render';
+import routeCallback from './routeCallback';
 
 const router = Router();
 
@@ -11,16 +13,12 @@ export default function expressMiddleware(this: IRouter): ExpressMiddleware {
   }
   return app => {
     this.routes.forEach((routeObj: RouteObject) => {
-      router.get(new RegExp(routeObj.regExp), (req: Request, res: Response) => {
-        const params = res.locals;
-        return render(app, req, res, routeObj.filePath, params);
-      });
+      if (routeObj.regExp) {
+        router.get(new RegExp(routeObj.regExp), routeCallback(render, app, routeObj.filePath));
+      }
     });
 
-    router.get('*', (req: Request, res: Response) => {
-      const params = res.locals;
-      return render(app, req, res, '/404', params);
-    });
+    router.get('*', routeCallback(render, app, '/404'));
 
     return router;
   };

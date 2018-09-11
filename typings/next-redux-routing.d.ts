@@ -1,14 +1,27 @@
 
 import { Request, Response, Router as ExpressRouter } from 'express';
-import { Server } from 'next';
+import { QueryStringMapObject, Server } from 'next';
 import { ComponentType } from 'react';
 import { Action, Middleware } from 'redux';
 
 export type ExpressMiddleware = (app: Server) => ExpressRouter;
 export type ExpressMiddlewareConstructor = (opts: OptionsObject) => ExpressMiddleware;
 
+export interface LinkProps {
+  children: JSX.Element | JSX.Element[];
+  href: string;
+  prefetch?: boolean;
+  // navigate?: (route: RouteObject, options: OptionsObject) => void;
+  scroll?: boolean;
+}
+
 export type OptionsObject = {
   routes?: Routes;
+};
+
+export type OptionsType = {
+  prefetch?: boolean;
+  scroll?: boolean;
 };
 
 export type ReduxOptionsObject = {
@@ -18,19 +31,36 @@ export type ReduxOptionsObject = {
 
 export type ReduxMiddleware = (opts: ReduxOptionsObject) => Middleware;
 
+export type Render = (
+  app: Server,
+  req: Request,
+  res: Response,
+  filePath: string,
+  params?: QueryStringMapObject
+) => Promise<void>;
+
+export type RouteCallback = (
+  render: Render,
+  app: Server,
+  filePath: string,
+  params?: Record<string, string | string[] | undefined> | undefined
+) => (req: Request, res: Response) => Promise<void>;
+
 export type Routes = {
   [x: string]: RouteObject
 };
 
 export type RouteObject = {
-  filePath: string;
+  name?: string;
+  regExp?: string;
   pathname: string;
-  regExp: string;
-  [x: string]: string | number | boolean
+  filePath: string;
+  [x: string]: string | number | boolean | undefined;
 };
 
 export interface INavigateAction extends Action {
   href: string;
+  options?: OptionsType;
 }
 
 export interface INavigateFailureAction extends Action {
