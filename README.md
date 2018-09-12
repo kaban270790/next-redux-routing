@@ -2,6 +2,8 @@
 
 [![Build Status](https://travis-ci.com/guillaume008/next-redux-routing.svg?branch=master)](https://travis-ci.com/guillaume008/next-redux-routing)
 
+[![Coverage Status](https://coveralls.io/repos/github/guillaume008/next-redux-routing/badge.svg?branch=master)](https://coveralls.io/github/guillaume008/next-redux-routing?branch=master)
+
 Universal, "single source of truth" routing solution for Next.js
 
 ## Usage
