@@ -45,7 +45,8 @@
   },
   "scripts": {
     "build": "del dist/* && ./node_modules/typescript/bin/tsc",
-    "test": "./node_modules/jest/bin/jest.js --coverage --coverageReporters=text-lcov | ./node_modules/coveralls/bin/coveralls.js"
+    "test": "./node_modules/jest/bin/jest.js --coverage",
+    "test-ci": "./node_modules/jest/bin/jest.js --coverage --coverageReporters=text-lcov | ./node_modules/coveralls/bin/coveralls.js"
   },
   "peerDependencies": {
     "express": ">=4",

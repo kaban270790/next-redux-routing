@@ -14,7 +14,7 @@ const mappedRoutes = Object.keys(routes).map(key => ({ name: key, ...routes[key]
 const router = Router({ routes });
 router.pushRoute = () => new Promise((resolve) => { resolve(true); });
 
-const middleware = [routerMiddleware.call(router)];
+const middleware = [router.reduxMiddleware];
 const mockStore = configureMockStore(middleware);
 
 describe('Express middleware', () => {

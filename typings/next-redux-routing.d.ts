@@ -79,7 +79,7 @@ export interface INavigateSuccessAction extends Action {
 
 export interface IRouter {
   expressMiddleware: ExpressMiddleware;
-  // Link: ComponentType;
+  Link: (props: LinkProps) => JSX.Element;
   reduxMiddleware: Middleware;
   Router: Server['router'];
 
@@ -87,6 +87,8 @@ export interface IRouter {
 
   getByName: (name: string) => RouteObject | undefined;
   getByPath: (path: string) => RouteObject | undefined;
+
+  getLink: () => (props: LinkProps) => JSX.Element;
 
   pushRoute: (route: RouteObject, query: object) => Promise<boolean>
 }

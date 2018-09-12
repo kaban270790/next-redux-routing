@@ -36,7 +36,7 @@ export class Router implements IRouter {
     return this.routes.find(r => r.regExp ? new RegExp(r.regExp).test(path) : false);
   }
 
-  getLink = () => {
+  getLink = (): (props: LinkProps) => JSX.Element => {
     return (props: LinkProps) => (
       <Link
         getByPath={this.getByPath}
