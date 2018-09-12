@@ -10,9 +10,11 @@ export type ExpressMiddlewareConstructor = (opts: OptionsObject) => ExpressMiddl
 
 export interface LinkProps {
   children: JSX.Element | JSX.Element[];
+  getByPath: (path: string) => RouteObject | undefined;
   href: string;
   prefetch?: boolean;
   navigate: Navigate;
+  Router: typeof NextRouter;
   scroll?: boolean;
 }
 
