@@ -5,7 +5,7 @@ import Router from '../../../lib';
 import routerMiddleware from '../../../lib/middleware/redux';
 
 import routes from '../../../routes';
-import { NAVIGATE, START_NAVIGATION, NAVIGATE_FAILURE, NAVIGATE_SUCCESS } from '../../../lib/middleware/redux/constants';
+import { START_NAVIGATION, NAVIGATE_FAILURE, NAVIGATE_SUCCESS } from '../../../lib/middleware/redux/constants';
 import { navigate } from '../../../lib/middleware/redux/actionCreators';
 import initialState from '../../../lib/middleware/redux/initialState';
 
@@ -14,7 +14,7 @@ const mappedRoutes = Object.keys(routes).map(key => ({ name: key, ...routes[key]
 const router = Router({ routes });
 router.pushRoute = () => new Promise((resolve) => { resolve(true); });
 
-const middleware = [router.reduxMiddleware];
+const middleware = [router.reduxRouterMiddleware];
 const mockStore = configureMockStore(middleware);
 
 describe('Express middleware', () => {

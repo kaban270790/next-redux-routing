@@ -20,7 +20,7 @@ describe('Express middleware', () => {
   });
 
   it('should return a function that returns a router with the correct routes', () => {
-    const router = routerMiddleware.call(Router)(app);
+    const router = routerMiddleware.call(Router)(app, express.Router);
     expect(router.stack.length).toEqual(3);
     expect(router.stack.find(layer => layer.regexp === /\b(about)\b\/?$/));
     expect(router.stack.find(layer => layer.regexp === /^\/?$/));

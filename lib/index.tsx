@@ -7,9 +7,9 @@ import { ExpressMiddleware, LinkProps, OptionsObject, IRouter, RouteObject } fro
 import { Link } from './components';
 
 export class Router implements IRouter {
-  public expressMiddleware: ExpressMiddleware;
+  public expressRouterMiddleware: ExpressMiddleware;
   public Link: (props: LinkProps) => JSX.Element;
-  public reduxMiddleware: Middleware;
+  public reduxRouterMiddleware: Middleware;
   public Router: typeof NextRouter;
   public routes: RouteObject[];
 
@@ -21,8 +21,8 @@ export class Router implements IRouter {
     this.routes = Object.keys(routes).map(key => ({ name: key, ...routes[key] }));
     this.Link = this.getLink();
     this.Router = Router;
-    this.expressMiddleware = expressMiddleware.call(this);
-    this.reduxMiddleware = reduxMiddleware.call(this, {
+    this.expressRouterMiddleware = expressMiddleware.call(this);
+    this.reduxRouterMiddleware = reduxMiddleware.call(this, {
       ...opts,
       Router: this.Router,
     });

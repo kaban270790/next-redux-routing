@@ -6,9 +6,7 @@
     "outDir": "./dist",
     "strict": true,
     "jsx": "react",
-    "lib": [
-      "es2015"
-    ],
+    "lib": ["es5", "es2015", "dom"],
     "baseUrl": ".",
     "typeRoots": [
       "./node_modules/@types"

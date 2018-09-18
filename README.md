@@ -77,7 +77,7 @@ const express = require('express');
 const next = require('next');
 
 // 1. Import the router from router.js
-const { expressRouterMiddleware } = require('../router');
+const router = require('./router');
 
 const port = 3000;
 const dev = process.env.NODE_ENV !== 'production';
@@ -89,8 +89,8 @@ const render = require('./render')(app);
 const startServer = async () => {
   const server = express();
 
-  // 2. Call the express middleware and pass in the app
-  server.use(expressRouterMiddleware(app));
+  // 2. Call the express middleware and pass in the app and the express Router
+  server.use(router.expressRouterMiddleware(app, express.Router));
 
   await app.prepare();
 

@@ -5,8 +5,7 @@ import NextRouter from 'next/router';
 import { ComponentType } from 'react';
 import { Action, Middleware } from 'redux';
 
-export type ExpressMiddleware = (app: Server) => ExpressRouter;
-export type ExpressMiddlewareConstructor = (opts: OptionsObject) => ExpressMiddleware;
+export type ExpressMiddleware = (app: Server, Router: () => ExpressRouter) => ExpressRouter;
 
 export interface LinkProps {
   children: JSX.Element | JSX.Element[];
@@ -78,9 +77,9 @@ export interface INavigateSuccessAction extends Action {
 }
 
 export interface IRouter {
-  expressMiddleware: ExpressMiddleware;
+  expressRouterMiddleware: ExpressMiddleware;
   Link: (props: LinkProps) => JSX.Element;
-  reduxMiddleware: Middleware;
+  reduxRouterMiddleware: Middleware;
   Router: Server['router'];
 
   routes: RouteObject[];
