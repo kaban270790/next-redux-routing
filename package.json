@@ -49,7 +49,6 @@
     "test-ci": "./node_modules/jest/bin/jest.js --coverage --coverageReporters=text-lcov | ./node_modules/coveralls/bin/coveralls.js"
   },
   "peerDependencies": {
-    "express": ">=4",
     "next": ">=6",
     "react": "^15.5.4 || ^16",
     "react-redux": "^5.0.7",

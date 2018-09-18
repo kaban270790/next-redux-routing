@@ -226,3 +226,7 @@ export default () => (
   </div>
 )
 ```
+
+### TODO
+
+While Express will suffice for first release, the plan is to adapt this package to handle any server framework.
