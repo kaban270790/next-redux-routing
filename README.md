@@ -54,7 +54,7 @@ various files throughout your project.
 ```javascript
 // router.js
 // 1. Import the Router constructor
-const Router = require('next-redux-routing');
+const Router = require('next-redux-routing').default;
 
 // 2. Import your routes file
 const routes = require('./routes');
