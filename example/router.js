@@ -1,4 +1,4 @@
-const Router = require('next-redux-routing').default;
+const Router = require('../dist').default;
 
 const routes = require('./routes');
 
